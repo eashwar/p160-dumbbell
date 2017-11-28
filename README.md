@@ -1,4 +1,4 @@
-# p160-dumbell
+# p160-dumbbell
 
 ## About
 
