@@ -87,7 +87,7 @@ dumbbell_angle = 0
 tight = sphere(pos=(-20*mega, y_t_init, 0),
                  radius=1*mega, 
                  mass=1*exa,
-                 color=tightColor, make_trail=True)
+                 color=tightColor, make_trail=False)
 tight.velocity = tightVel
 tight.momentum = tight.mass * tight.velocity
 
@@ -95,7 +95,7 @@ tight.momentum = tight.mass * tight.velocity
 loose = sphere(pos=(0, y_l_init, 0),
                 radius=1*mega,
                 mass=5*exa,
-                color=looseColor, make_trail=True)
+                color=looseColor, make_trail=False)
 loose.velocity = looseVel
 loose.momentum = loose.mass * loose.velocity
 
@@ -103,13 +103,14 @@ loose.momentum = loose.mass * loose.velocity
 t = 0
 dt = 100
    
-while (t/604800) <= 1000.0:
+while (t/604800) <= 100.0:
     rate(40000)
 
+    #Plot one point per day
     if (t%86400 == 0):
         curve.plot(pos=(t/604800, tight.pos.x))
 
-    if (t%604800 == 0):
+    if (t%6048000 == 0):
         print str(t/604800) + " weeks have passed"
 
         
