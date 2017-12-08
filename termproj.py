@@ -1,5 +1,6 @@
 from __future__ import division
 from visual import *
+from visual.graph import *
 
 ## Constants
 G = 6.67408e-11 #cubic meters per kilogram seconds-squared (m**3 kg**-1 s**-2)
@@ -17,6 +18,11 @@ dumbbellColor = vector(.4,.4,.4)
 tightColor = vector(.5 + random.random()*.5,0,.5 + random.random()) # random purple
 looseColor = vector(0,.5 + random.random()*.5,5 + random.random()) # random cyan
 
+graph = gdisplay(x=10, y=100+sceneHeight,
+                 xtitle='time (weeks)', ytitle='x (meters)',
+                 width=sceneHeight*sceneAspect, height=sceneHeight,
+                 background=color.white, foreground=color.white)
+curve = gcurve(display=graph, color=tightColor)
 
 ## System Parameters
 dumbbellRad = 5*mega #5000 kilometers
@@ -28,9 +34,12 @@ dumbbellMass = 200*exa #2e20 kilograms
 tightMass = 1*exa     #1e18 kilograms
 looseMass = 10*exa     #5e18 kilograms
 
-y_t_init = 20*mega
-y_l_init = 40*mega
 
+y_t_init = 15*mega
+y_l_init = 35*mega
+
+tightVel = vector(10,0,30)
+looseVel = vector(-2,0,10)
 
 # 3D MODELLING
 
@@ -49,7 +58,7 @@ end_two = sphere(pos=(20*mega,0,0),
                  radius=dumbbellRad,
                  mass=dumbbellMass,
                  color=dumbbellColor)
-end_two.velocity = dumbbellVelocity
+end_two.velocity = vector(0,0,0)
 end_two.momentum = end_two.mass * end_two.velocity
 
 ### Center of Mass
@@ -68,7 +77,6 @@ rod = cylinder(pos=(-20*mega,0,0),
                radius=1.25*mega,
                moment=net_moment,
                color=dumbbellColor)
-
 rod.ang_vel = vector(0,0,0)
 rod.ang_mom = rod.ang_vel * rod.moment
 
@@ -80,8 +88,7 @@ tight = sphere(pos=(-20*mega, y_t_init, 0),
                  radius=1*mega, 
                  mass=1*exa,
                  color=tightColor, make_trail=True)
-
-tight.velocity = vector(0,0,20)
+tight.velocity = tightVel
 tight.momentum = tight.mass * tight.velocity
 
 
@@ -89,17 +96,23 @@ loose = sphere(pos=(0, y_l_init, 0),
                 radius=1*mega,
                 mass=5*exa,
                 color=looseColor, make_trail=True)
-
-loose.velocity = vector(0,0,7)
+loose.velocity = looseVel
 loose.momentum = loose.mass * loose.velocity
 
 # TIME
 t = 0
 dt = 100
    
-while True:
-    rate(10000)
+while (t/604800) <= 1000.0:
+    rate(40000)
 
+    if (t%86400 == 0):
+        curve.plot(pos=(t/604800, tight.pos.x))
+
+    if (t%604800 == 0):
+        print str(t/604800) + " weeks have passed"
+
+        
     #FORCE AND TORQUE CALCULATION
     
     ## Tightly Orbiting Body
@@ -172,5 +185,6 @@ while True:
     rod.rotate(angle=dumbbell_angle, axis=rod.ang_vel, origin=com.pos)
     end_one.rotate(angle=dumbbell_angle, axis=rod.ang_vel, origin=com.pos)
     end_two.rotate(angle=dumbbell_angle, axis=rod.ang_vel, origin=com.pos)
+
 
     t += dt
