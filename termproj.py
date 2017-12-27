@@ -32,7 +32,7 @@ rodLength = 40*mega  #40000 kilometers
 
 dumbbellMass = 200*exa #2e20 kilograms
 tightMass = 1*exa     #1e18 kilograms
-looseMass = 10*exa     #5e18 kilograms
+looseMass = 10*exa     #1e19 kilograms
 
 
 y_t_init = 15*mega
@@ -87,7 +87,7 @@ dumbbell_angle = 0
 tight = sphere(pos=(-20*mega, y_t_init, 0),
                  radius=1*mega, 
                  mass=1*exa,
-                 color=tightColor, make_trail=False)
+                 color=tightColor, make_trail=True)
 tight.velocity = tightVel
 tight.momentum = tight.mass * tight.velocity
 
@@ -95,7 +95,7 @@ tight.momentum = tight.mass * tight.velocity
 loose = sphere(pos=(0, y_l_init, 0),
                 radius=1*mega,
                 mass=5*exa,
-                color=looseColor, make_trail=False)
+                color=looseColor, make_trail=True)
 loose.velocity = looseVel
 loose.momentum = loose.mass * loose.velocity
 
